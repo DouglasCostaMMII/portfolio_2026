@@ -1,0 +1,1621 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Douglas Costa · QA Engineer</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #0a0a0a;
+        --bg2: #111111;
+        --card: #161616;
+        --border: rgba(255, 255, 255, 0.07);
+        --accent: #00ff87;
+        --accent2: #00c8ff;
+        --red: #ff3b5c;
+        --text: #f0f0f0;
+        --muted: #666;
+        --muted2: #999;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: "Instrument Sans", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        cursor: none;
+        overflow-x: hidden;
+      }
+
+      /* CUSTOM CURSOR */
+      .cursor {
+        width: 12px;
+        height: 12px;
+        background: var(--accent);
+        border-radius: 50%;
+        position: fixed;
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        transition:
+          width 0.2s,
+          height 0.2s,
+          background 0.2s;
+        mix-blend-mode: difference;
+      }
+      .cursor-ring {
+        width: 36px;
+        height: 36px;
+        border: 1px solid rgba(0, 255, 135, 0.4);
+        border-radius: 50%;
+        position: fixed;
+        pointer-events: none;
+        z-index: 9998;
+        transform: translate(-50%, -50%);
+        transition:
+          transform 0.12s ease,
+          width 0.2s,
+          height 0.2s,
+          border-color 0.2s;
+      }
+      body:has(a:hover) .cursor,
+      body:has(button:hover) .cursor {
+        width: 20px;
+        height: 20px;
+      }
+      body:has(a:hover) .cursor-ring,
+      body:has(button:hover) .cursor-ring {
+        width: 54px;
+        height: 54px;
+        border-color: var(--accent);
+      }
+
+      /* SCANLINE OVERLAY */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: repeating-linear-gradient(
+          0deg,
+          transparent,
+          transparent 2px,
+          rgba(0, 0, 0, 0.03) 2px,
+          rgba(0, 0, 0, 0.03) 4px
+        );
+        pointer-events: none;
+        z-index: 1000;
+      }
+
+      /* NAV */
+      nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 500;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px 60px;
+        border-bottom: 1px solid var(--border);
+        background: rgba(10, 10, 10, 0.85);
+        backdrop-filter: blur(24px);
+      }
+      .nav-logo {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.4rem;
+        letter-spacing: 0.08em;
+        color: var(--text);
+      }
+      .nav-logo span {
+        color: var(--accent);
+      }
+      .nav-links {
+        display: flex;
+        gap: 32px;
+        list-style: none;
+      }
+      .nav-links a {
+        color: var(--muted);
+        font-size: 0.82rem;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        text-decoration: none;
+        transition: color 0.2s;
+      }
+      .nav-links a:hover {
+        color: var(--accent);
+      }
+      .nav-status {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.78rem;
+        color: var(--muted2);
+      }
+      .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--accent);
+        box-shadow: 0 0 8px var(--accent);
+        animation: blink 2s ease-in-out infinite;
+      }
+      @keyframes blink {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.3;
+        }
+      }
+
+      /* HERO */
+      .hero {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+        padding: 120px 60px 80px;
+        position: relative;
+        overflow: hidden;
+        gap: 60px;
+      }
+
+      /* Grid background */
+      .hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(0, 255, 135, 0.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(0, 255, 135, 0.04) 1px, transparent 1px);
+        background-size: 60px 60px;
+        mask-image: radial-gradient(
+          ellipse 80% 80% at 50% 50%,
+          black,
+          transparent
+        );
+        pointer-events: none;
+      }
+
+      .hero-left {
+        position: relative;
+        z-index: 1;
+      }
+
+      .hero-eyebrow {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 28px;
+      }
+      .eyebrow-line {
+        width: 40px;
+        height: 1px;
+        background: var(--accent);
+      }
+      .eyebrow-text {
+        font-size: 0.75rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--accent);
+      }
+
+      .hero-name {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: clamp(5rem, 9vw, 9rem);
+        line-height: 0.9;
+        letter-spacing: -0.02em;
+        margin-bottom: 8px;
+      }
+      .hero-name .last {
+        color: var(--accent);
+      }
+
+      .hero-role {
+        font-size: 1.1rem;
+        color: var(--muted2);
+        margin-bottom: 32px;
+        font-weight: 400;
+        letter-spacing: 0.04em;
+      }
+      .hero-role strong {
+        color: var(--text);
+        font-weight: 600;
+      }
+
+      .hero-bio {
+        font-size: 0.95rem;
+        line-height: 1.75;
+        color: var(--muted2);
+        max-width: 480px;
+        margin-bottom: 44px;
+      }
+
+      .hero-actions {
+        display: flex;
+        gap: 14px;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 14px 28px;
+        border-radius: 4px;
+        font-family: "Instrument Sans", sans-serif;
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        text-decoration: none;
+        transition: all 0.2s;
+        cursor: none;
+      }
+      .btn-primary {
+        background: var(--accent);
+        color: #000;
+        border: none;
+      }
+      .btn-primary:hover {
+        background: #00e07a;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 32px rgba(0, 255, 135, 0.25);
+      }
+      .btn-outline {
+        background: transparent;
+        color: var(--text);
+        border: 1px solid var(--border);
+      }
+      .btn-outline:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+        transform: translateY(-2px);
+      }
+
+      /* Hero right — terminal card */
+      .hero-right {
+        position: relative;
+        z-index: 1;
+      }
+
+      .terminal {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow:
+          0 40px 80px rgba(0, 0, 0, 0.6),
+          0 0 0 1px rgba(0, 255, 135, 0.05);
+      }
+      .terminal-header {
+        background: #1c1c1c;
+        padding: 14px 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        border-bottom: 1px solid var(--border);
+      }
+      .tbar {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+      }
+      .tbar.r {
+        background: #ff5f57;
+      }
+      .tbar.y {
+        background: #ffbd2e;
+      }
+      .tbar.g {
+        background: #28ca41;
+      }
+      .terminal-title {
+        margin-left: 8px;
+        font-size: 0.75rem;
+        color: var(--muted);
+        font-family: monospace;
+      }
+      .terminal-body {
+        padding: 28px;
+        font-family: "Courier New", monospace;
+        font-size: 0.85rem;
+        line-height: 2;
+      }
+      .t-comment {
+        color: #444;
+      }
+      .t-key {
+        color: var(--accent2);
+      }
+      .t-val {
+        color: #ffd085;
+      }
+      .t-str {
+        color: var(--accent);
+      }
+      .t-num {
+        color: #ff8c69;
+      }
+      .t-arr {
+        color: var(--muted2);
+      }
+      .t-cursor {
+        display: inline-block;
+        width: 8px;
+        height: 1em;
+        background: var(--accent);
+        vertical-align: text-bottom;
+        animation: cur 1s step-end infinite;
+      }
+      @keyframes cur {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0;
+        }
+      }
+
+      /* ABOUT STRIP */
+      .about-strip {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        border-top: 1px solid var(--border);
+        border-bottom: 1px solid var(--border);
+      }
+      .strip-item {
+        padding: 44px 48px;
+        border-right: 1px solid var(--border);
+        position: relative;
+        overflow: hidden;
+        transition: background 0.3s;
+      }
+      .strip-item:last-child {
+        border-right: none;
+      }
+      .strip-item:hover {
+        background: var(--bg2);
+      }
+      .strip-item::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: var(--accent);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.3s;
+      }
+      .strip-item:hover::after {
+        transform: scaleX(1);
+      }
+      .strip-num {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 3.2rem;
+        line-height: 1;
+        color: var(--text);
+        margin-bottom: 6px;
+      }
+      .strip-num span {
+        color: var(--accent);
+      }
+      .strip-label {
+        font-size: 0.82rem;
+        color: var(--muted);
+        letter-spacing: 0.05em;
+      }
+
+      /* SECTIONS */
+      .section {
+        padding: 100px 60px;
+      }
+      .section-inner {
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+      .section-tag {
+        font-size: 0.72rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .section-tag::before {
+        content: "//";
+        color: var(--muted);
+      }
+      .section-title {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: clamp(2.5rem, 5vw, 4rem);
+        letter-spacing: 0.02em;
+        line-height: 1;
+        margin-bottom: 60px;
+      }
+      .section-title span {
+        color: var(--accent);
+      }
+
+      /* SKILLS */
+      .skills-bg {
+        background: var(--bg2);
+      }
+      .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+
+      .skill-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 28px 28px 24px;
+        transition:
+          border-color 0.25s,
+          transform 0.25s;
+        position: relative;
+        overflow: hidden;
+      }
+      .skill-card:hover {
+        border-color: rgba(0, 255, 135, 0.2);
+        transform: translateY(-4px);
+      }
+      .skill-cat {
+        font-size: 0.7rem;
+        text-transform: uppercase;
+        letter-spacing: 0.15em;
+        color: var(--muted);
+        margin-bottom: 16px;
+      }
+      .skill-name {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.3rem;
+        letter-spacing: 0.05em;
+        margin-bottom: 20px;
+      }
+      .skill-bar-wrap {
+        height: 3px;
+        background: rgba(255, 255, 255, 0.06);
+        border-radius: 2px;
+        margin-bottom: 8px;
+      }
+      .skill-bar {
+        height: 100%;
+        border-radius: 2px;
+        background: linear-gradient(90deg, var(--accent), var(--accent2));
+        width: 0;
+        transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+      }
+      .skill-pct {
+        font-size: 0.78rem;
+        color: var(--muted);
+      }
+
+      .skill-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 16px;
+      }
+      .skill-tag {
+        padding: 4px 10px;
+        border-radius: 3px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--border);
+        font-size: 0.72rem;
+        color: var(--muted2);
+        font-family: monospace;
+      }
+
+      /* EXPERIENCE */
+      .exp-timeline {
+        position: relative;
+        padding-left: 32px;
+      }
+      .exp-timeline::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 8px;
+        bottom: 8px;
+        width: 1px;
+        background: var(--border);
+      }
+      .exp-item {
+        position: relative;
+        margin-bottom: 56px;
+      }
+      .exp-item::before {
+        content: "";
+        position: absolute;
+        left: -36px;
+        top: 8px;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--bg);
+        border: 1px solid var(--muted);
+        transition:
+          background 0.2s,
+          border-color 0.2s;
+      }
+      .exp-item:hover::before {
+        background: var(--accent);
+        border-color: var(--accent);
+        box-shadow: 0 0 10px var(--accent);
+      }
+      .exp-item.current::before {
+        background: var(--accent);
+        border-color: var(--accent);
+        box-shadow: 0 0 10px var(--accent);
+      }
+
+      .exp-header {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        margin-bottom: 8px;
+      }
+      .exp-company {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.4rem;
+        letter-spacing: 0.05em;
+      }
+      .exp-period {
+        font-size: 0.75rem;
+        color: var(--muted);
+        letter-spacing: 0.08em;
+        background: rgba(255, 255, 255, 0.04);
+        padding: 4px 12px;
+        border-radius: 100px;
+        border: 1px solid var(--border);
+        white-space: nowrap;
+      }
+      .exp-role {
+        font-size: 0.9rem;
+        color: var(--accent);
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+      .exp-type {
+        font-size: 0.78rem;
+        color: var(--muted);
+        margin-bottom: 14px;
+      }
+      .exp-body {
+        color: var(--muted2);
+        font-size: 0.88rem;
+        line-height: 1.75;
+      }
+      .exp-body ul {
+        padding-left: 16px;
+      }
+      .exp-body li {
+        margin-bottom: 4px;
+      }
+      .exp-skills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 14px;
+      }
+      .exp-skill {
+        font-size: 0.72rem;
+        font-family: monospace;
+        padding: 3px 9px;
+        border-radius: 3px;
+        background: rgba(0, 255, 135, 0.05);
+        border: 1px solid rgba(0, 255, 135, 0.12);
+        color: var(--accent);
+      }
+
+      /* CERTS */
+      .certs-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+      .cert-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        padding: 22px 24px;
+        display: flex;
+        gap: 16px;
+        align-items: flex-start;
+        transition:
+          border-color 0.2s,
+          transform 0.2s;
+      }
+      .cert-card:hover {
+        border-color: rgba(0, 200, 255, 0.25);
+        transform: translateY(-3px);
+      }
+      .cert-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        background: rgba(0, 200, 255, 0.07);
+        border: 1px solid rgba(0, 200, 255, 0.12);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.1rem;
+        flex-shrink: 0;
+      }
+      .cert-name {
+        font-size: 0.88rem;
+        font-weight: 600;
+        margin-bottom: 4px;
+      }
+      .cert-issuer {
+        font-size: 0.75rem;
+        color: var(--muted2);
+      }
+      .cert-year {
+        font-size: 0.7rem;
+        color: var(--muted);
+        margin-top: 6px;
+        font-family: monospace;
+      }
+
+      /* PROJECT */
+      .project-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 48px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+        transition: border-color 0.3s;
+        margin-bottom: 20px;
+      }
+      .project-card:hover {
+        border-color: rgba(0, 255, 135, 0.15);
+      }
+      .proj-tag {
+        font-size: 0.7rem;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--accent);
+        margin-bottom: 14px;
+      }
+      .proj-name {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 2.8rem;
+        letter-spacing: 0.02em;
+        line-height: 1;
+        margin-bottom: 16px;
+      }
+      .proj-desc {
+        color: var(--muted2);
+        font-size: 0.9rem;
+        line-height: 1.75;
+        margin-bottom: 24px;
+      }
+      .proj-stack {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 28px;
+      }
+      .stack-pill {
+        font-size: 0.72rem;
+        font-family: monospace;
+        padding: 4px 10px;
+        border-radius: 3px;
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid var(--border);
+        color: var(--muted2);
+      }
+      .proj-links {
+        display: flex;
+        gap: 12px;
+      }
+      .proj-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 20px;
+        border-radius: 4px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        text-decoration: none;
+        transition: all 0.2s;
+        cursor: none;
+      }
+      .proj-link.primary {
+        background: var(--accent);
+        color: #000;
+      }
+      .proj-link.primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(0, 255, 135, 0.2);
+      }
+      .proj-link.sec {
+        border: 1px solid var(--border);
+        color: var(--muted2);
+      }
+      .proj-link.sec:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+      }
+
+      /* Mock QA UI in project card */
+      .qa-mock {
+        background: #0d0d0d;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 24px;
+        font-family: monospace;
+        font-size: 0.78rem;
+      }
+      .qa-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      .qa-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+      }
+      .qa-dot.pass {
+        background: #28ca41;
+      }
+      .qa-dot.fail {
+        background: #ff5f57;
+      }
+      .qa-dot.skip {
+        background: #ffbd2e;
+      }
+      .qa-line {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 6px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      }
+      .qa-line:last-child {
+        border-bottom: none;
+      }
+      .qa-badge {
+        padding: 2px 8px;
+        border-radius: 3px;
+        font-size: 0.65rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        flex-shrink: 0;
+      }
+      .qa-badge.pass {
+        background: rgba(40, 202, 65, 0.12);
+        color: #28ca41;
+      }
+      .qa-badge.fail {
+        background: rgba(255, 95, 87, 0.12);
+        color: #ff5f57;
+      }
+      .qa-badge.skip {
+        background: rgba(255, 189, 46, 0.12);
+        color: #ffbd2e;
+      }
+      .qa-test-name {
+        color: var(--muted2);
+        flex: 1;
+      }
+      .qa-time {
+        color: var(--muted);
+        font-size: 0.7rem;
+      }
+      .qa-summary {
+        margin-top: 16px;
+        padding-top: 16px;
+        border-top: 1px solid var(--border);
+        display: flex;
+        gap: 20px;
+      }
+      .qa-sum-item span {
+        display: block;
+      }
+      .qa-sum-item .n {
+        font-size: 1.4rem;
+        font-weight: 700;
+      }
+      .qa-sum-item .l {
+        font-size: 0.7rem;
+        color: var(--muted);
+      }
+      .qa-sum-item.p .n {
+        color: #28ca41;
+      }
+      .qa-sum-item.f .n {
+        color: #ff5f57;
+      }
+      .qa-sum-item.s .n {
+        color: #ffbd2e;
+      }
+
+      /* CONTACT */
+      .contact-bg {
+        background: var(--bg2);
+      }
+      .contact-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: start;
+      }
+      .contact-headline {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: clamp(3rem, 6vw, 5.5rem);
+        line-height: 0.95;
+        letter-spacing: 0.01em;
+        margin-bottom: 24px;
+      }
+      .contact-headline span {
+        color: var(--accent);
+      }
+      .contact-sub {
+        color: var(--muted2);
+        line-height: 1.75;
+        margin-bottom: 40px;
+      }
+      .contact-links {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+      .contact-link {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 16px 20px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        text-decoration: none;
+        color: var(--text);
+        transition:
+          border-color 0.2s,
+          transform 0.2s;
+      }
+      .contact-link:hover {
+        border-color: var(--accent);
+        transform: translateX(6px);
+      }
+      .contact-link-icon {
+        font-size: 1.2rem;
+      }
+      .contact-link-label {
+        font-size: 0.82rem;
+        color: var(--muted);
+        margin-bottom: 2px;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .contact-link-val {
+        font-size: 0.92rem;
+        font-weight: 500;
+      }
+      .contact-link-arrow {
+        margin-left: auto;
+        color: var(--muted);
+        transition:
+          color 0.2s,
+          transform 0.2s;
+      }
+      .contact-link:hover .contact-link-arrow {
+        color: var(--accent);
+        transform: translateX(4px);
+      }
+
+      /* Availability card */
+      .avail-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 40px;
+        height: 100%;
+      }
+      .avail-card .section-tag {
+        margin-bottom: 24px;
+      }
+      .avail-status {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 24px;
+      }
+      .avail-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+      .avail-list li {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: var(--muted2);
+        font-size: 0.88rem;
+      }
+      .avail-list li::before {
+        content: "→";
+        color: var(--accent);
+      }
+
+      /* FOOTER */
+      footer {
+        padding: 32px 60px;
+        border-top: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      footer p {
+        font-size: 0.78rem;
+        color: var(--muted);
+      }
+      .footer-logo {
+        font-family: "Bebas Neue", sans-serif;
+        font-size: 1.1rem;
+        letter-spacing: 0.1em;
+      }
+      .footer-logo span {
+        color: var(--accent);
+      }
+
+      /* ANIMATIONS */
+      .reveal {
+        opacity: 0;
+        transform: translateY(30px);
+        transition:
+          opacity 0.8s ease,
+          transform 0.8s ease;
+      }
+      .reveal.up {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      @media (max-width: 1024px) {
+        nav {
+          padding: 16px 32px;
+        }
+        .hero {
+          grid-template-columns: 1fr;
+          padding: 120px 32px 60px;
+          gap: 40px;
+        }
+        .hero-right {
+          display: none;
+        }
+        .about-strip {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .strip-item {
+          border-bottom: 1px solid var(--border);
+        }
+        .section {
+          padding: 80px 32px;
+        }
+        .skills-grid,
+        .certs-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .project-card {
+          grid-template-columns: 1fr;
+          gap: 32px;
+        }
+        .contact-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+      @media (max-width: 640px) {
+        .about-strip {
+          grid-template-columns: 1fr 1fr;
+        }
+        .skills-grid,
+        .certs-grid {
+          grid-template-columns: 1fr;
+        }
+        footer {
+          flex-direction: column;
+          gap: 12px;
+          text-align: center;
+        }
+        body {
+          cursor: auto;
+        }
+        .cursor,
+        .cursor-ring {
+          display: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-ring" id="ring"></div>
+
+    <!-- NAV -->
+    <nav>
+      <div class="nav-logo">DC<span>.</span></div>
+      <ul class="nav-links">
+        <li><a href="#sobre">Sobre</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#experiencia">Experiência</a></li>
+        <li><a href="#certs">Certificações</a></li>
+        <li><a href="#contato">Contato</a></li>
+      </ul>
+      <div class="nav-status">
+        <div class="status-dot"></div>
+        Disponível para oportunidades
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" id="sobre">
+      <div class="hero-left">
+        <div class="hero-eyebrow">
+          <div class="eyebrow-line"></div>
+          <span class="eyebrow-text">QA Engineer · Palhoça, SC</span>
+        </div>
+        <h1 class="hero-name">
+          DOUGLAS<br />
+          <span class="last">COSTA</span>
+        </h1>
+        <p class="hero-role">
+          <strong>Quality Assurance Analyst Pleno</strong> @ Weduka
+        </p>
+        <p class="hero-bio">
+          Analista de QA com foco em testes de ponta a ponta — manuais e
+          automatizados. Especialista em Cypress, metodologias ágeis e garantia
+          contínua de qualidade. Entrego softwares com confiança, não com sorte.
+        </p>
+        <div class="hero-actions">
+          <a href="#experiencia" class="btn btn-primary">Ver experiência →</a>
+          <a href="#contato" class="btn btn-outline">Entrar em contato</a>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="terminal">
+          <div class="terminal-header">
+            <div class="tbar r"></div>
+            <div class="tbar y"></div>
+            <div class="tbar g"></div>
+            <span class="terminal-title">douglas.json</span>
+          </div>
+          <div class="terminal-body">
+            <span class="t-comment">// perfil profissional</span><br />
+            {<br />
+            &nbsp;&nbsp;<span class="t-key">"nome"</span>:
+            <span class="t-str">"Douglas Costa"</span>,<br />
+            &nbsp;&nbsp;<span class="t-key">"cargo"</span>:
+            <span class="t-str">"QA Analyst Pleno"</span>,<br />
+            &nbsp;&nbsp;<span class="t-key">"empresa"</span>:
+            <span class="t-str">"Weduka"</span>,<br />
+            &nbsp;&nbsp;<span class="t-key">"experiencia"</span>:
+            <span class="t-num">4</span>
+            <span class="t-comment">// anos</span>,<br />
+            &nbsp;&nbsp;<span class="t-key">"stack"</span>: [<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="t-str">"Cypress"</span>,<span
+              class="t-str"
+              >"CodeceptJS"</span
+            >,<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="t-str">"Appium"</span>,<span
+              class="t-str"
+              >"Postman"</span
+            >,<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;<span class="t-str">"PostgreSQL"</span
+            >,<span class="t-str">"Scrum"</span><br />
+            &nbsp;&nbsp;],<br />
+            &nbsp;&nbsp;<span class="t-key">"disponivel"</span>:
+            <span class="t-str t-cursor"></span><br />
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- STATS STRIP -->
+    <div class="about-strip" id="sobre-strip">
+      <div class="strip-item reveal">
+        <div class="strip-num">4<span>+</span></div>
+        <div class="strip-label">Anos de experiência em QA</div>
+      </div>
+      <div class="strip-item reveal">
+        <div class="strip-num">3<span>+</span></div>
+        <div class="strip-label">Empresas atendidas</div>
+      </div>
+      <div class="strip-item reveal">
+        <div class="strip-num">20<span>+</span></div>
+        <div class="strip-label">Certificações & cursos</div>
+      </div>
+      <div class="strip-item reveal">
+        <div class="strip-num">+950</div>
+        <div class="strip-label">Bugs encontrados antes da produção</div>
+      </div>
+    </div>
+
+    <!-- SKILLS -->
+    <section class="section skills-bg" id="skills">
+      <div class="section-inner">
+        <div class="section-tag reveal">Competências técnicas</div>
+        <h2 class="section-title reveal">Meu <span>Arsenal</span></h2>
+        <div class="skills-grid">
+          <div class="skill-card reveal">
+            <div class="skill-cat">Automação de Testes</div>
+            <div class="skill-name">CYPRESS</div>
+            <div class="skill-bar-wrap">
+              <div class="skill-bar" data-pct="90"></div>
+            </div>
+            <div class="skill-pct">90% — Avançado</div>
+            <div class="skill-tags">
+              <span class="skill-tag">E2E</span>
+              <span class="skill-tag">Smoke Tests</span>
+              <span class="skill-tag">Regressão</span>
+              <span class="skill-tag">CI/CD</span>
+            </div>
+          </div>
+          <div class="skill-card reveal">
+            <div class="skill-cat">Mobile & Web</div>
+            <div class="skill-name">CODECEPTJS + APPIUM</div>
+            <div class="skill-bar-wrap">
+              <div class="skill-bar" data-pct="80"></div>
+            </div>
+            <div class="skill-pct">80% — Avançado</div>
+            <div class="skill-tags">
+              <span class="skill-tag">Android</span>
+              <span class="skill-tag">iOS</span>
+              <span class="skill-tag">Web Automation</span>
+            </div>
+          </div>
+          <div class="skill-card reveal">
+            <div class="skill-cat">API Testing</div>
+            <div class="skill-name">POSTMAN</div>
+            <div class="skill-bar-wrap">
+              <div class="skill-bar" data-pct="50"></div>
+            </div>
+            <div class="skill-pct">50% — Intermediário</div>
+            <div class="skill-tags">
+              <span class="skill-tag">REST</span>
+              <span class="skill-tag">Collections</span>
+              <span class="skill-tag">Variáveis</span>
+            </div>
+          </div>
+          <div class="skill-card reveal">
+            <div class="skill-cat">Banco de Dados</div>
+            <div class="skill-name">POSTGRESQL · MYSQL</div>
+            <div class="skill-bar-wrap">
+              <div class="skill-bar" data-pct="75"></div>
+            </div>
+            <div class="skill-pct">75% — Intermediário</div>
+            <div class="skill-tags">
+              <span class="skill-tag">Queries</span>
+              <span class="skill-tag">Validação de dados</span>
+              <span class="skill-tag">SQL</span>
+            </div>
+          </div>
+          <div class="skill-card reveal">
+            <div class="skill-cat">Metodologias Ágeis</div>
+            <div class="skill-name">SCRUM · KANBAN</div>
+            <div class="skill-bar-wrap">
+              <div class="skill-bar" data-pct="88"></div>
+            </div>
+            <div class="skill-pct">88% — Avançado</div>
+            <div class="skill-tags">
+              <span class="skill-tag">Daily</span>
+              <span class="skill-tag">Sprint Review</span>
+              <span class="skill-tag">Refinamento</span>
+              <span class="skill-tag">Jira</span>
+            </div>
+          </div>
+          <div class="skill-card reveal">
+            <div class="skill-cat">Linguagens</div>
+            <div class="skill-name">JAVASCRIPT · JAVA</div>
+            <div class="skill-bar-wrap">
+              <div class="skill-bar" data-pct="72"></div>
+            </div>
+            <div class="skill-pct">72% — Intermediário</div>
+            <div class="skill-tags">
+              <span class="skill-tag">JS</span>
+              <span class="skill-tag">Java Fundamentals</span>
+              <span class="skill-tag">HTML/CSS</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section class="section" id="experiencia">
+      <div class="section-inner">
+        <div class="section-tag reveal">Trajetória profissional</div>
+        <h2 class="section-title reveal">Onde <span>Atuei</span></h2>
+        <div class="exp-timeline">
+          <div class="exp-item current reveal">
+            <div class="exp-header">
+              <div class="exp-company">WEDUKA</div>
+              <div class="exp-period">Mar 2025 → Atual</div>
+            </div>
+            <div class="exp-role">QA Analyst Pleno</div>
+            <div class="exp-type">Remoto · Florianópolis, SC</div>
+            <div class="exp-body">
+              Atuação ponta a ponta na garantia de qualidade de produtos
+              digitais, com foco em prevenção de falhas e entregas seguras.
+              Participação ativa em cerimônias ágeis, planejamento de testes e
+              automação com Cypress.
+            </div>
+            <div class="exp-skills">
+              <span class="exp-skill">Cypress</span>
+              <span class="exp-skill">Testes Manuais</span>
+              <span class="exp-skill">Scrum</span>
+              <span class="exp-skill">CI/CD</span>
+            </div>
+          </div>
+
+          <div class="exp-item current reveal">
+            <div class="exp-header">
+              <div class="exp-company">WEDUKA</div>
+              <div class="exp-period">Abr 2024 → Mar 2025</div>
+            </div>
+            <div class="exp-role">QA Analyst Junior</div>
+            <div class="exp-type">Remoto</div>
+            <div class="exp-body">
+              Responsável pela criação e manutenção de suítes de testes
+              automatizados, execução de smoke tests e regressão para garantir
+              qualidade contínua nas entregas.
+            </div>
+            <div class="exp-skills">
+              <span class="exp-skill">Cypress</span>
+              <span class="exp-skill">Smoke Tests</span>
+              <span class="exp-skill">Regressão</span>
+            </div>
+          </div>
+
+          <div class="exp-item reveal">
+            <div class="exp-header">
+              <div class="exp-company">FLEXMOBILE SISTEMAS</div>
+              <div class="exp-period">Mar 2024 → Mar 2025</div>
+            </div>
+            <div class="exp-role">Analista de Testes Junior</div>
+            <div class="exp-type">Presencial · Brasil</div>
+            <div class="exp-body">
+              <ul>
+                <li>
+                  Planejamento e execução de testes em múltiplas plataformas
+                  (web, mobile, desktop)
+                </li>
+                <li>Elaboração e documentação de cenários de teste</li>
+                <li>Análise de requisitos e sugestão de melhorias</li>
+                <li>
+                  Atuação em sistemas JS/Java (web), Delphi (ERP) e banco
+                  PostgreSQL
+                </li>
+              </ul>
+            </div>
+            <div class="exp-skills">
+              <span class="exp-skill">PostgreSQL</span>
+              <span class="exp-skill">JavaScript</span>
+              <span class="exp-skill">Java</span>
+              <span class="exp-skill">Delphi</span>
+              <span class="exp-skill">Scrum</span>
+            </div>
+          </div>
+
+          <div class="exp-item reveal">
+            <div class="exp-header">
+              <div class="exp-company">FLEXMOBILE SISTEMAS</div>
+              <div class="exp-period">Out 2023 → Abr 2024</div>
+            </div>
+            <div class="exp-role">Test Assistant</div>
+            <div class="exp-type">Presencial · Santa Catarina</div>
+            <div class="exp-body">
+              Suporte na execução de testes, início da jornada em QA
+              profissional.
+            </div>
+            <div class="exp-skills">
+              <span class="exp-skill">Testes Manuais</span>
+              <span class="exp-skill">Documentação</span>
+            </div>
+          </div>
+
+          <div class="exp-item reveal">
+            <div class="exp-header">
+              <div class="exp-company">FLEXMOBILE SISTEMAS</div>
+              <div class="exp-period">Mar 2023 → Out 2023</div>
+            </div>
+            <div class="exp-role">Software Testing Intern</div>
+            <div class="exp-type">Estágio · Santa Catarina</div>
+            <div class="exp-body">
+              Automação de testes web utilizando CodeceptJS e Appium, melhorando
+              eficiência e cobertura nos testes de regressão.
+            </div>
+            <div class="exp-skills">
+              <span class="exp-skill">CodeceptJS</span>
+              <span class="exp-skill">Appium</span>
+              <span class="exp-skill">JavaScript</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CERTIFICATIONS -->
+    <section class="section" id="certs">
+      <div class="section-inner">
+        <div class="section-tag reveal">Formação & qualificações</div>
+        <h2 class="section-title reveal">Certificações</h2>
+        <div class="certs-grid">
+          <div class="cert-card reveal">
+            <div class="cert-icon">🎓</div>
+            <div>
+              <div class="cert-name">Bacharelado em Sistemas da Informação</div>
+              <div class="cert-issuer">UNISUL</div>
+              <div class="cert-year">2023 → 2026</div>
+            </div>
+          </div>
+          <div class="cert-card reveal">
+            <div class="cert-icon">🏆</div>
+            <div>
+              <div class="cert-name">Scrum Fundamentals Certified</div>
+              <div class="cert-issuer">VMEdu / Vabro.ai</div>
+              <div class="cert-year">Set 2024 · #1048572</div>
+            </div>
+          </div>
+          <div class="cert-card reveal">
+            <div class="cert-icon">⚡</div>
+            <div>
+              <div class="cert-name">Testes com Cypress</div>
+              <div class="cert-issuer">Udemy</div>
+              <div class="cert-year">Set 2023</div>
+            </div>
+          </div>
+          <div class="cert-card reveal">
+            <div class="cert-icon">📊</div>
+            <div>
+              <div class="cert-name">Analista de Qualidade</div>
+              <div class="cert-issuer">Udemy · ISO 9001</div>
+              <div class="cert-year">Jan 2025</div>
+            </div>
+          </div>
+          <div class="cert-card reveal">
+            <div class="cert-icon">🛡️</div>
+            <div>
+              <div class="cert-name">Introduction to Cybersecurity</div>
+              <div class="cert-issuer">Cisco</div>
+              <div class="cert-year">Nov 2023</div>
+            </div>
+          </div>
+          <div class="cert-card reveal">
+            <div class="cert-icon">☕</div>
+            <div>
+              <div class="cert-name">Java Fundamentals & Foundations</div>
+              <div class="cert-issuer">Oracle</div>
+              <div class="cert-year">Jun 2023</div>
+            </div>
+          </div>
+          <div class="cert-card reveal">
+            <div class="cert-icon">📱</div>
+            <div>
+              <div class="cert-name">Automação com CodeceptJS e Appium</div>
+              <div class="cert-issuer">Udemy</div>
+              <div class="cert-year">Mar 2023</div>
+            </div>
+          </div>
+          <div class="cert-card reveal">
+            <div class="cert-icon">🗄️</div>
+            <div>
+              <div class="cert-name">Database Design & Foundations</div>
+              <div class="cert-issuer">Oracle</div>
+              <div class="cert-year">Jun 2023</div>
+            </div>
+          </div>
+          <div class="cert-card reveal">
+            <div class="cert-icon">🔬</div>
+            <div>
+              <div class="cert-name">Início Rápido em Teste e QA</div>
+              <div class="cert-issuer">Iterasys</div>
+              <div class="cert-year">Ago 2023</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="section contact-bg" id="contato">
+      <div class="section-inner">
+        <div class="contact-grid">
+          <div class="reveal">
+            <div class="section-tag">Vamos conversar</div>
+            <h2 class="contact-headline">
+              PRONTO<br />PARA O<br /><span>PRÓXIMO</span><br />PROJETO
+            </h2>
+            <p class="contact-sub">
+              Procurando um QA que garante qualidade antes do deploy, não
+              depois? Me manda uma mensagem — respondo rápido.
+            </p>
+            <div class="contact-links">
+              <a
+                href="https://www.linkedin.com/in/dougllascosta/"
+                class="contact-link"
+              >
+                <span class="contact-link-icon">💼</span>
+                <div>
+                  <div class="contact-link-label">LinkedIn</div>
+                  <div class="contact-link-val">Douglas Costa</div>
+                </div>
+                <span class="contact-link-arrow">›</span>
+              </a>
+              <a href="mailto:douglas.costa2002@gmail.com" class="contact-link">
+                <span class="contact-link-icon">✉️</span>
+                <div>
+                  <div class="contact-link-label">Email</div>
+                  <div class="contact-link-val">douglas.costa2002@gmail.com</div>
+                </div>
+                <span class="contact-link-arrow">›</span>
+              </a>
+              <a href="#" class="contact-link">
+                <span class="contact-link-icon">📍</span>
+                <div>
+                  <div class="contact-link-label">Localização</div>
+                  <div class="contact-link-val">Palhoça, Santa Catarina</div>
+                </div>
+                <span class="contact-link-arrow">›</span>
+              </a>
+            </div>
+          </div>
+          <div class="reveal">
+            <div class="avail-card">
+              <div class="section-tag">Status atual</div>
+              <div class="avail-status">
+                <div class="status-dot"></div>
+                Aberto a novas oportunidades
+              </div>
+              <ul class="avail-list">
+                <li>QA Engineer Pleno / Sênior</li>
+                <li>Automação com Cypress / Playwright</li>
+                <li>Regime remoto ou híbrido</li>
+                <li>Startups e produtos digitais</li>
+                <li>Times ágeis com cultura de qualidade</li>
+              </ul>
+              <br />
+              <div class="section-tag" style="margin-bottom: 16px">
+                Formação em andamento
+              </div>
+              <div
+                style="
+                  color: var(--muted2);
+                  font-size: 0.88rem;
+                  line-height: 1.75;
+                "
+              >
+                Bacharelado em Sistemas da Informação<br />
+                <span style="color: var(--muted)"
+                  >UNISUL · conclusão: Abr/2026</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-logo">DC<span>.</span></div>
+      <p>
+        © 2025 Douglas Costa · QA Engineer · Feito com obsessão por qualidade.
+      </p>
+      <p
+        style="font-family: monospace; font-size: 0.72rem; color: var(--muted)"
+      >
+        v1.0.0
+      </p>
+    </footer>
+
+    <script>
+      // Cursor
+      const cursor = document.getElementById("cursor");
+      const ring = document.getElementById("ring");
+      let mx = 0,
+        my = 0,
+        rx = 0,
+        ry = 0;
+      document.addEventListener("mousemove", (e) => {
+        mx = e.clientX;
+        my = e.clientY;
+      });
+      function animateCursor() {
+        cursor.style.left = mx + "px";
+        cursor.style.top = my + "px";
+        rx += (mx - rx) * 0.12;
+        ry += (my - ry) * 0.12;
+        ring.style.left = rx + "px";
+        ring.style.top = ry + "px";
+        requestAnimationFrame(animateCursor);
+      }
+      animateCursor();
+
+      // Scroll reveal
+      const revealEls = document.querySelectorAll(".reveal");
+      const obs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e, i) => {
+            if (e.isIntersecting) {
+              setTimeout(() => e.target.classList.add("up"), i * 60);
+              obs.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.08 },
+      );
+      revealEls.forEach((el) => obs.observe(el));
+
+      // Skill bars animate on scroll
+      const bars = document.querySelectorAll(".skill-bar");
+      const barObs = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              const pct = e.target.dataset.pct;
+              e.target.style.width = pct + "%";
+              barObs.unobserve(e.target);
+            }
+          });
+        },
+        { threshold: 0.5 },
+      );
+      bars.forEach((b) => barObs.observe(b));
+
+      // Hero terminal typing
+      const termStr = document.querySelector(".t-str.t-cursor");
+      const options = ['"true"', '"Remoto"', '"Pleno"'];
+      let idx = 0;
+      setInterval(() => {
+        idx = (idx + 1) % options.length;
+        const text = options[idx];
+        let i = 0;
+        termStr.textContent = "";
+        const typ = setInterval(() => {
+          termStr.textContent += text[i++];
+          if (i >= text.length) clearInterval(typ);
+        }, 80);
+      }, 3000);
+    </script>
+  </body>
+</html>
